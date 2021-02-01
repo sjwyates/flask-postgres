@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template
-# from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
+
 # from sqlalchemy import create_engine
 # from flask_heroku import Heroku
 # from datetime import datetime
@@ -9,23 +10,34 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
 
 # heroku = Heroku(app)
-# db = SQLAlchemy(app)
 #
 # engine = create_engine('postgresql+psycopg2://postgres:agcbio@localhost/reagent_portal')
 #
 #
-# class Reagent(db.Model):
-#     reagent_id = db.Column(db.Integer, primary_key=True)
-#     template_id = db.Column(db.Integer, nullable=False)
-#     lot_id = db.Column(db.Integer, nullable=False)
-#     expiry = db.Column(db.DateTime, nullable=False)
-#     status = db.Column(db.String(10), nullable=False, default='Unopened')
-#
-#     def __repr__(self):
-#         return '<Reagent #%r>' % self.reagent_id
+class Reagent(db.Model):
+    __tablename__ = 'reagents'
+
+    reagent_id = db.Column(db.Integer, primary_key=True)
+    template_id = db.Column(db.Integer, nullable=False)
+    lot_id = db.Column(db.Integer, nullable=False)
+    expiry = db.Column(db.DateTime, nullable=False)
+    status = db.Column(db.String(10), nullable=False)
+
+    def __init__(self, template_id, lot_id, expiry, status="unopened"):
+        self.template_id = template_id
+        self.lot_id = lot_id
+        self.expiry = expiry
+        self.status = status
+
+    def __repr__(self):
+        return '<Reagent #%r>' % self.reagent_id
+
+
 #
 #
 # class ReagentTemplate(db.Model):

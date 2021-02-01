@@ -12,6 +12,7 @@ psycopg2 = "*"
 gunicorn = "*"
 autoenv = "*"
 python-dotenv = "*"
+flask-migrate = "*"
 
 [dev-packages]
 
