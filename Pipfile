@@ -13,6 +13,7 @@ gunicorn = "*"
 autoenv = "*"
 python-dotenv = "*"
 flask-migrate = "*"
+flask-script = "*"
 
 [dev-packages]
 
