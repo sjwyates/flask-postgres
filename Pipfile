@@ -10,6 +10,8 @@ sqlalchemy = "*"
 flask-sqlalchemy = "*"
 psycopg2 = "*"
 gunicorn = "*"
+autoenv = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
