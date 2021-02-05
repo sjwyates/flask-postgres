@@ -17,7 +17,7 @@ class Reagent(db.Model):
         self.status = status
 
     def __repr__(self):
-        return '<Reagent #%r>' % self.reagent_id
+        return '<Reagent #%r>' % self.id
 
 
 class ReagentTemplate(db.Model):
@@ -40,26 +40,28 @@ class ReagentTemplate(db.Model):
         self.requires_qual = requires_qual
 
     def __repr__(self):
-        return '<Template #%r>' % self.template_id
+        return '<Template #%r>' % self.id
 
 
 class Lot(db.Model):
     __tablename__ = 'lots'
 
     id = db.Column(db.Integer, primary_key=True)
+    temp_id = db.Column(db.Integer, nullable=False)
     mfg_id = db.Column(db.Integer, nullable=False)
     lot_num = db.Column(db.String(30), nullable=False, default=False)
     expiry = db.Column(db.DateTime, nullable=False, default='NA')
     cofa = db.Column(db.String(50), nullable=False)
 
-    def __init__(self, mfg_id, lot_num, expiry, cofa):
+    def __init__(self, temp_id, mfg_id, lot_num, expiry, cofa):
+        self.temp_id = temp_id
         self.mfg_id = mfg_id
         self.lot_num = lot_num
         self.expiry = expiry
         self.cofa = cofa
 
     def __repr__(self):
-        return '<Lot #%r>' % self.lot_id
+        return '<Lot #%r>' % self.id
 
 
 class Manufacturer(db.Model):
@@ -72,4 +74,4 @@ class Manufacturer(db.Model):
         self.name = name
 
     def __repr__(self):
-        return '<Manfucaturer #%r>' % self.mfg_id
+        return '<Manfucaturer #%r>' % self.id

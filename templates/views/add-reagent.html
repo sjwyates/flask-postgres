@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% set title = 'Receive Reagents' %}
+
+{% block content %}
+<div>
+    {% include 'components/hero.html' %}
+</div>
+{% endblock %}
+
+{% block components %}
+<script src="{{ url_for('static', filename='js/components/add-reagent-form.js') }}"></script>
+{% endblock components %}
