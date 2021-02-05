@@ -14,6 +14,8 @@ autoenv = "*"
 python-dotenv = "*"
 flask-migrate = "*"
 flask-script = "*"
+requests = "*"
+libsass = "*"
 
 [dev-packages]
 
