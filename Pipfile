@@ -15,6 +15,9 @@ python-dotenv = "*"
 flask-migrate = "*"
 flask-script = "*"
 psycopg2-binary = "*"
+requests = "*"
+libsass = "*"
+enum34 = "*"
 
 [dev-packages]
 
