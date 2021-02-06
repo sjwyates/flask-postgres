@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sassutils.wsgi import SassMiddleware
 import os
-from datetime import datetime
+from seed import manufacturers, reagent_templates, lots, reagents
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
@@ -17,7 +17,6 @@ from models import Reagent, ReagentTemplate, Lot, Manufacturer
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    results = db.session.query(Manufacturer)
     return render_template('views/index.html')
 
 
@@ -42,25 +41,41 @@ def add_reagent():
                                lots=lots)
 
 
-@app.route('/reagent', methods=['GET', 'POST'])
-def reagents():
-    errors = []
-    if request.method == "POST":
-        try:
-            template = Lot(
-                temp_id=2,
-                mfg_id=4,
-                lot_num='abc123',
-                expiry=datetime(2022, 11, 4, 0, 0),
-                cofa='path/to/file/cofa.pdf'
-            )
-            db.session.add(template)
-            db.session.commit()
-        except:
-            errors.append(
-                f"Problem: could not add {request.json['name']}"
-            )
-    return render_template('views/reagent-details.html')
+@app.route('/seed', methods=['POST'])
+def seed():
+    db.create_all()
+    for mfg in manufacturers:
+        entry = Manufacturer(
+            name=mfg
+        )
+        db.session.add(entry)
+    for temp in reagent_templates:
+        entry = ReagentTemplate(
+            description=temp['description'],
+            expiry_duration=temp['expiry_dur'],
+            expiry_type=temp['expiry_type'],
+            container_size=temp['container_size'],
+            container_units=temp['container_units'],
+            requires_qual=temp['requires_qual']
+        )
+        db.session.add(entry)
+    for lot in lots:
+        entry = Lot(
+            template_id=lot['temp_id'],
+            mfg_id=lot['mfg_id'],
+            lot_num=lot['lot_num'],
+            expiry=lot['expiry']
+        )
+        db.session.add(entry)
+    for reagent in reagents:
+        entry = Reagent(
+            template_id=reagent['template_id'],
+            lot_id=reagent['lot_id'],
+            expiry=reagent['expiry']
+        )
+        db.session.add(entry)
+    db.session.commit()
+    return 'Good times!'
 
 
 if __name__ == '__main__':
