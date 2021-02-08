@@ -23,21 +23,27 @@ def home():
 @app.route('/add', methods=['GET', 'POST'])
 def add_reagent():
     if request.method == 'GET':
+        templates = [{
+            'id': getattr(d, 'id'),
+            'description': getattr(d, 'description'),
+            'container_size': getattr(d, 'container_size'),
+            'container_units': getattr(d, 'container_units'),
+            'requires_qual': getattr(d, 'requires_qual')
+        } for d in db.session.query(ReagentTemplate).all()]
         mfgs = [{
             'id': getattr(d, 'id'),
             'name': getattr(d, 'name')
         } for d in db.session.query(Manufacturer).all()]
-        templates = [{
-            'id': getattr(d, 'id'),
-            'description': getattr(d, 'description')
-        } for d in db.session.query(ReagentTemplate).all()]
         lots = [{
             'id': getattr(d, 'id'),
-            'lot_num': getattr(d, 'lot_num')
+            'lot_num': getattr(d, 'lot_num'),
+            'template_id': getattr(d, 'template_id'),
+            'mfg_id': getattr(d, 'mfg_id'),
+            'expiry': getattr(d, 'expiry')
         } for d in db.session.query(Lot).all()]
         return render_template('views/add-reagent.html',
-                               manufacturers=mfgs,
                                templates=templates,
+                               manufacturers=mfgs,
                                lots=lots)
 
 

@@ -3,29 +3,22 @@
 {% set title = 'Receive Reagents' %}
 
 {% block content %}
-    <div>
+    <div id="v-add">
         {% include 'components/hero.html' %}
-        <h2>Manufacturers</h2>
-        <ul>
-            {% for mfg in manufacturers %}
-                <li>{{ mfg.name }}</li>
-            {% endfor %}
-        </ul>
-        <h2>Templates</h2>
-        <ul>
-            {% for template in templates %}
-                <li>{{ template.description }}</li>
-            {% endfor %}
-        </ul>
-        <h2>Lots</h2>
-        <ul>
-            {% for lot in lots %}
-                <li>{{ lot.lot_num }}</li>
-            {% endfor %}
-        </ul>
+        <add-reagent-form :templates="templates" :manufacturers="manufacturers" :lots="lots"></add-reagent-form>
     </div>
 {% endblock %}
 
-{% block components %}
+{% block variables %}
+<script>
+    const data = {
+        templates: JSON.parse('{{ templates | tojson }}'),
+        manufacturers: JSON.parse('{{ manufacturers | tojson }}'),
+        lots: JSON.parse('{{ lots | tojson }}'),
+    }
+</script>
+{% endblock variables %}
+
+{% block vue %}
     <script src="{{ url_for('static', filename='js/components/add-reagent-form.js') }}"></script>
-{% endblock components %}
+{% endblock vue %}

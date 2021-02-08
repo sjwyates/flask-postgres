@@ -9,9 +9,8 @@
 <body>
     {% block content %}{% endblock content %}
 
-    <script src="{{ url_for('static', filename='js/vue.js') }}"></script>
-    {% block variables %}{% endblock variables %}
-    {% block components %}{% endblock components %}
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vue.js') }}"></script>
+{% block variables %}{% endblock variables %}
+{% block vue %}{% endblock vue %}
 </body>
 </html>
