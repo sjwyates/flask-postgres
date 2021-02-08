@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sassutils.wsgi import SassMiddleware
 import os
@@ -20,7 +20,7 @@ def home():
     return render_template('views/index.html')
 
 
-@app.route('/add', methods=['GET', 'POST'])
+@app.route('/reagents/add', methods=['GET', 'POST'])
 def add_reagent():
     if request.method == 'GET':
         templates = [{
@@ -45,9 +45,17 @@ def add_reagent():
                                templates=templates,
                                manufacturers=mfgs,
                                lots=lots)
+    if request.method == 'POST':
+        reagent = request.json
+        return redirect(url_for('details', reagent_id=reagent['id']))
 
 
-@app.route('/seed', methods=['POST'])
+@app.route('/reagents/<reagent_id>', methods=['GET'])
+def details(reagent_id):
+    return render_template('views/reagent-details.html', reagent_id=reagent_id)
+
+
+@app.route('/reagents/s33d', methods=['POST'])
 def seed():
     db.create_all()
     for mfg in manufacturers:
