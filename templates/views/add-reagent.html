@@ -3,11 +3,29 @@
 {% set title = 'Receive Reagents' %}
 
 {% block content %}
-<div>
-    {% include 'components/hero.html' %}
-</div>
+    <div>
+        {% include 'components/hero.html' %}
+        <h2>Manufacturers</h2>
+        <ul>
+            {% for mfg in manufacturers %}
+                <li>{{ mfg.name }}</li>
+            {% endfor %}
+        </ul>
+        <h2>Templates</h2>
+        <ul>
+            {% for template in templates %}
+                <li>{{ template.description }}</li>
+            {% endfor %}
+        </ul>
+        <h2>Lots</h2>
+        <ul>
+            {% for lot in lots %}
+                <li>{{ lot.lot_num }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
 
 {% block components %}
-<script src="{{ url_for('static', filename='js/components/add-reagent-form.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/components/add-reagent-form.js') }}"></script>
 {% endblock components %}

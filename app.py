@@ -23,7 +23,7 @@ def home():
 @app.route('/add', methods=['GET', 'POST'])
 def add_reagent():
     if request.method == 'GET':
-        manufacturers = [{
+        mfgs = [{
             'id': getattr(d, 'id'),
             'name': getattr(d, 'name')
         } for d in db.session.query(Manufacturer).all()]
@@ -36,45 +36,46 @@ def add_reagent():
             'lot_num': getattr(d, 'lot_num')
         } for d in db.session.query(Lot).all()]
         return render_template('views/add-reagent.html',
-                               manufacturers=manufacturers,
+                               manufacturers=mfgs,
                                templates=templates,
                                lots=lots)
 
 
 @app.route('/seed', methods=['POST'])
 def seed():
-    db.create_all()
-    for mfg in manufacturers:
-        entry = Manufacturer(
-            name=mfg
-        )
-        db.session.add(entry)
-    for temp in reagent_templates:
-        entry = ReagentTemplate(
-            description=temp['description'],
-            expiry_duration=temp['expiry_dur'],
-            expiry_type=temp['expiry_type'],
-            container_size=temp['container_size'],
-            container_units=temp['container_units'],
-            requires_qual=temp['requires_qual']
-        )
-        db.session.add(entry)
-    for lot in lots:
-        entry = Lot(
-            template_id=lot['temp_id'],
-            mfg_id=lot['mfg_id'],
-            lot_num=lot['lot_num'],
-            expiry=lot['expiry']
-        )
-        db.session.add(entry)
-    for reagent in reagents:
-        entry = Reagent(
-            template_id=reagent['template_id'],
-            lot_id=reagent['lot_id'],
-            expiry=reagent['expiry']
-        )
-        db.session.add(entry)
-    db.session.commit()
+    # db.create_all()
+    # for mfg in manufacturers:
+    #     entry = Manufacturer(
+    #         name=mfg
+    #     )
+    #     db.session.add(entry)
+    # for temp in reagent_templates:
+    #     entry = ReagentTemplate(
+    #         description=temp['description'],
+    #         expiry_duration=temp['expiry_dur'],
+    #         expiry_type=temp['expiry_type'],
+    #         container_size=temp['container_size'],
+    #         container_units=temp['container_units'],
+    #         requires_qual=temp['requires_qual']
+    #     )
+    #     db.session.add(entry)
+    # for lot in lots:
+    #     entry = Lot(
+    #         template_id=lot['temp_id'],
+    #         mfg_id=lot['mfg_id'],
+    #         lot_num=lot['lot_num'],
+    #         expiry=lot['expiry']
+    #     )
+    #     db.session.add(entry)
+    # for reagent in reagents:
+    #     entry = Reagent(
+    #         template_id=reagent['template_id'],
+    #         lot_id=reagent['lot_id'],
+    #         expiry=reagent['expiry'],
+    #         status=reagent['status']
+    #     )
+    #     db.session.add(entry)
+    # db.session.commit()
     return 'Good times!'
 
 
