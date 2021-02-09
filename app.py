@@ -17,7 +17,7 @@ from models import Reagent, ReagentTemplate, Lot, Manufacturer
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template('views/index.html')
+    return render_template('index.html')
 
 
 @app.route('/reagents/add', methods=['GET', 'POST'])
@@ -41,7 +41,7 @@ def add_reagent():
             'mfg_id': getattr(d, 'mfg_id'),
             'expiry': getattr(d, 'expiry')
         } for d in db.session.query(Lot).all()]
-        return render_template('views/add-reagent.html',
+        return render_template('add-reagent.html',
                                templates=templates,
                                manufacturers=mfgs,
                                lots=lots)
@@ -61,7 +61,7 @@ def add_reagent():
 
 @app.route('/reagents/<reagent_id>', methods=['GET'])
 def details(reagent_id):
-    return render_template('views/reagent-details.html', reagent_id=reagent_id)
+    return render_template('reagent-details.html', reagent_id=reagent_id)
 
 
 @app.route('/reagents/s33d', methods=['POST'])
