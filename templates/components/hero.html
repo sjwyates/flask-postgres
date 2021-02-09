@@ -1,7 +1,10 @@
 <section class="hero is-success">
-    <div class="hero-body">
-        <p class="title">
-            {{ title }}
-        </p>
+    <div class="hero-body columns is-vcentered">
+        <div class="column is-narrow">
+            <figure class="image is-48x48">
+                <img src="{{ url_for('static', filename='images/agc-logo.png') }}" alt="AGC Biologics Logo">
+            </figure>
+        </div>
+        <p class="title column is-narrow">{{ title }}</p>
     </div>
 </section>

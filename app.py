@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, json, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sassutils.wsgi import SassMiddleware
 import os
@@ -46,8 +46,17 @@ def add_reagent():
                                manufacturers=mfgs,
                                lots=lots)
     if request.method == 'POST':
-        reagent = request.json
-        return redirect(url_for('details', reagent_id=reagent['id']))
+        try:
+            reagent = request.json
+            response = app.response_class(
+                response=json.dumps(reagent),
+                status=200,
+                mimetype='application/json'
+            )
+            return response
+        except:
+            return 'oops!'
+        # return redirect(url_for('details', reagent_id=reagent['template_id']))
 
 
 @app.route('/reagents/<reagent_id>', methods=['GET'])

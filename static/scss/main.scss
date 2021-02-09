@@ -3,4 +3,12 @@
 $info: #038BB3;
 $success: #95C580;
 
+body {
+  background-color: hsl(0, 0%, 96%);
+  height: 100vh;
+}
+
+@import "components";
+@import "views";
+
 @import "../bulma/bulma";

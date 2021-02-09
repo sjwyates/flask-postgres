@@ -3,9 +3,13 @@
 {% set title = 'Receive Reagents' %}
 
 {% block content %}
-    <div id="v-add">
-        {% include 'components/hero.html' %}
-        <add-reagent-form :templates="templates" :manufacturers="manufacturers" :lots="lots"></add-reagent-form>
+    {% include 'components/hero.html' %}
+    <div id="v-add" class="container has-background-light">
+        <section class="section mx-6">
+            <div class="container is-max-desktop">
+                <add-reagent-form :templates="templates" :manufacturers="manufacturers" :lots="lots"></add-reagent-form>
+            </div>
+        </section>
     </div>
 {% endblock %}
 
