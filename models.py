@@ -1,5 +1,5 @@
 from app import db
-from enums import UnitsOfMeasure, ExpiryTypes, ReagentStatus
+from sqlalchemy.types import Enum
 
 
 class Reagent(db.Model):
@@ -8,13 +8,13 @@ class Reagent(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     template_id = db.Column(db.Integer, db.ForeignKey('reagent_templates.id'))
     lot_id = db.Column(db.Integer, db.ForeignKey('lots.id'))
-    status = db.Column(db.Enum(ReagentStatus), default=ReagentStatus.U)
+    status = db.Column(Enum('Unopened', 'Open', 'Quarantine', 'Discarded', name='status'))
 
-    def __init__(self, template_id, lot_id, expiry):
+    def __init__(self, template_id, lot_id, expiry, status):
         self.template_id = template_id
         self.lot_id = lot_id
         self.expiry = expiry
-        self.status = ReagentStatus.U
+        self.status = status
 
     def __repr__(self):
         return '<Reagent #%r>' % self.id
@@ -26,12 +26,12 @@ class ReagentTemplate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(50))
     expiry_dur = db.Column(db.Integer, default=0)
-    expiry_type = db.Column(db.Enum(ExpiryTypes))
+    expiry_type = db.Column(Enum('Single', 'Hours', 'Days', 'Weeks', 'Months', 'Years', name='expiry_types'))
     container_size = db.Column(db.Float)
-    container_units = db.Column(db.Enum(UnitsOfMeasure))
+    container_units = db.Column(Enum('Liters', 'Milliliters', 'Microliters', 'Kilograms', 'Grams', 'Milligrams', 'Micrograms', 'Gallons', 'Pounds', 'Vials', 'Kits', 'Other', name='container_units'))
     requires_qual = db.Column(db.Boolean, default=False)
     reagents = db.relationship('Reagent', backref='template', lazy=True)
-    reagents = db.relationship('Lot', backref='template', lazy=True)
+    lots = db.relationship('Lot', backref='template', lazy=True)
 
     def __init__(self, description, expiry_duration, expiry_type, container_size, container_units, requires_qual):
         self.description = description

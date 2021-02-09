@@ -1,0 +1,31 @@
+{% set title = 'Receive Reagents' %}
+<!DOCTYPE html>
+<html>
+<head>
+    {% block title %}{% endblock title %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link href="{{ url_for('static', filename='css/main.scss.css') }}" rel="stylesheet" type="text/css">
+</head>
+<body>
+{% include 'components/hero.html' %}
+<div id="v-add" class="container has-background-light">
+    <section class="section mx-6">
+        <div class="container is-max-desktop">
+            <add-reagent-form :templates="templates" :manufacturers="manufacturers" :lots="lots"></add-reagent-form>
+        </div>
+    </section>
+</div>
+
+<script>
+    const data = {
+        templates: JSON.parse('{{ templates | tojson }}'),
+        manufacturers: JSON.parse('{{ manufacturers | tojson }}'),
+        lots: JSON.parse('{{ lots | tojson }}'),
+    }
+</script>
+
+<script src="{{ url_for('static', filename='js/vue.js') }}"></script>
+<script src="{{ url_for('static', filename='js/add-reagent-form.js') }}"></script>
+</body>
+</html>

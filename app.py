@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, json, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sassutils.wsgi import SassMiddleware
 import os
@@ -18,31 +18,54 @@ from models import Reagent, ReagentTemplate, Lot, Manufacturer
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template('views/index.html')
+    return render_template('index.html')
 
 
-@app.route('/add', methods=['GET', 'POST'])
+@app.route('/reagents/add', methods=['GET', 'POST'])
 def add_reagent():
     if request.method == 'GET':
-        manufacturers = [{
+        templates = [{
+            'id': getattr(d, 'id'),
+            'description': getattr(d, 'description'),
+            'container_size': getattr(d, 'container_size'),
+            'container_units': getattr(d, 'container_units'),
+            'requires_qual': getattr(d, 'requires_qual')
+        } for d in db.session.query(ReagentTemplate).all()]
+        mfgs = [{
             'id': getattr(d, 'id'),
             'name': getattr(d, 'name')
         } for d in db.session.query(Manufacturer).all()]
-        templates = [{
-            'id': getattr(d, 'id'),
-            'description': getattr(d, 'description')
-        } for d in db.session.query(ReagentTemplate).all()]
         lots = [{
             'id': getattr(d, 'id'),
-            'lot_num': getattr(d, 'lot_num')
+            'lot_num': getattr(d, 'lot_num'),
+            'template_id': getattr(d, 'template_id'),
+            'mfg_id': getattr(d, 'mfg_id'),
+            'expiry': getattr(d, 'expiry')
         } for d in db.session.query(Lot).all()]
-        return render_template('views/add-reagent.html',
-                               manufacturers=manufacturers,
+        return render_template('add-reagent.html',
                                templates=templates,
+                               manufacturers=mfgs,
                                lots=lots)
+    if request.method == 'POST':
+        try:
+            reagent = request.json
+            response = app.response_class(
+                response=json.dumps(reagent),
+                status=200,
+                mimetype='application/json'
+            )
+            return response
+        except:
+            return 'oops!'
+        # return redirect(url_for('details', reagent_id=reagent['template_id']))
 
 
-@app.route('/seed', methods=['POST'])
+@app.route('/reagents/<reagent_id>', methods=['GET'])
+def details(reagent_id):
+    return render_template('reagent-details.html', reagent_id=reagent_id)
+
+
+@app.route('/reagents/s33d', methods=['POST'])
 def seed():
     db.create_all()
     for mfg in manufacturers:
@@ -50,6 +73,7 @@ def seed():
             name=mfg
         )
         db.session.add(entry)
+        db.session.commit()
     for temp in reagent_templates:
         entry = ReagentTemplate(
             description=temp['description'],
@@ -60,6 +84,7 @@ def seed():
             requires_qual=temp['requires_qual']
         )
         db.session.add(entry)
+        db.session.commit()
     for lot in lots:
         entry = Lot(
             template_id=lot['temp_id'],
@@ -68,14 +93,16 @@ def seed():
             expiry=lot['expiry']
         )
         db.session.add(entry)
+        db.session.commit()
     for reagent in reagents:
         entry = Reagent(
             template_id=reagent['template_id'],
             lot_id=reagent['lot_id'],
-            expiry=reagent['expiry']
+            expiry=reagent['expiry'],
+            status=reagent['status']
         )
         db.session.add(entry)
-    db.session.commit()
+        db.session.commit()
     return 'Good times!'
 
 

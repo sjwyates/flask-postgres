@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% set title = 'im a reagent' %}
+
+{% block content %}
+    <div>
+        {% include 'components/hero.html' %}
+        <h1>{{ reagent_id }}</h1>
+    </div>
+{% endblock %}
