@@ -47,16 +47,9 @@ def add_reagent():
                                manufacturers=mfgs,
                                lots=lots)
     if request.method == 'POST':
-        try:
-            reagent = request.json
-            response = app.response_class(
-                response=json.dumps(reagent),
-                status=200,
-                mimetype='application/json'
-            )
-            return response
-        except:
-            return 'oops!'
+        headers = request.headers
+        print(dict(request.headers))
+        return 'gneiss!'
         # return redirect(url_for('details', reagent_id=reagent['template_id']))
 
 
@@ -65,44 +58,49 @@ def details(reagent_id):
     return render_template('reagent-details.html', reagent_id=reagent_id)
 
 
-@app.route('/reagents/s33d', methods=['POST'])
-def seed():
-    db.create_all()
-    for mfg in manufacturers:
-        entry = Manufacturer(
-            name=mfg
-        )
-        db.session.add(entry)
-        db.session.commit()
-    for temp in reagent_templates:
-        entry = ReagentTemplate(
-            description=temp['description'],
-            expiry_duration=temp['expiry_dur'],
-            expiry_type=temp['expiry_type'],
-            container_size=temp['container_size'],
-            container_units=temp['container_units'],
-            requires_qual=temp['requires_qual']
-        )
-        db.session.add(entry)
-        db.session.commit()
-    for lot in lots:
-        entry = Lot(
-            template_id=lot['temp_id'],
-            mfg_id=lot['mfg_id'],
-            lot_num=lot['lot_num'],
-            expiry=lot['expiry']
-        )
-        db.session.add(entry)
-        db.session.commit()
-    for reagent in reagents:
-        entry = Reagent(
-            template_id=reagent['template_id'],
-            lot_id=reagent['lot_id'],
-            expiry=reagent['expiry'],
-            status=reagent['status']
-        )
-        db.session.add(entry)
-        db.session.commit()
+@app.route('/reagents/s33d/<table>', methods=['POST'])
+def seed(table):
+    if table == 'all':
+        db.create_all()
+    elif table == 'mfg':
+        for mfg in manufacturers:
+            entry = Manufacturer(
+                name=mfg
+            )
+            db.session.add(entry)
+            db.session.commit()
+    elif table == 'temp':
+        for temp in reagent_templates:
+            entry = ReagentTemplate(
+                description=temp['description'],
+                expiry_duration=temp['expiry_dur'],
+                expiry_type=temp['expiry_type'],
+                container_size=temp['container_size'],
+                container_units=temp['container_units'],
+                requires_qual=temp['requires_qual']
+            )
+            db.session.add(entry)
+            db.session.commit()
+    elif table == 'lot':
+        for lot in lots:
+            entry = Lot(
+                template_id=lot['temp_id'],
+                mfg_id=lot['mfg_id'],
+                lot_num=lot['lot_num'],
+                expiry=lot['expiry']
+            )
+            db.session.add(entry)
+            db.session.commit()
+    elif table == 'reagent':
+        for reagent in reagents:
+            entry = Reagent(
+                template_id=reagent['template_id'],
+                lot_id=reagent['lot_id'],
+                expiry=reagent['expiry'],
+                status=reagent['status']
+            )
+            db.session.add(entry)
+            db.session.commit()
     return 'Good times!'
 
 

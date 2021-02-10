@@ -8,7 +8,6 @@ flask = "*"
 flask-heroku = "*"
 sqlalchemy = "*"
 flask-sqlalchemy = "*"
-psycopg2 = "*"
 gunicorn = "*"
 autoenv = "*"
 python-dotenv = "*"
@@ -18,6 +17,7 @@ psycopg2-binary = "*"
 requests = "*"
 libsass = "*"
 enum34 = "*"
+flask-login = "*"
 
 [dev-packages]
 

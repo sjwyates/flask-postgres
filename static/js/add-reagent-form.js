@@ -53,10 +53,7 @@ const AddReagentForm = Vue.component('add-reagent-form', {
                 redirect: 'follow',
                 body: JSON.stringify(data)
             });
-            setTimeout(() => {
-                 console.log(res);
-            }, 1000)
-
+            console.log(res);
         },
         clear: function () {
             this.template = [];
