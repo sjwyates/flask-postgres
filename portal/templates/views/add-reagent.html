@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div id="v-add" class="container has-background-light">
+        <section class="section mx-6">
+            <div class="container is-max-desktop">
+                <add-reagent-form :templates="templates" :manufacturers="manufacturers" :lots="lots"></add-reagent-form>
+            </div>
+        </section>
+    </div>
+{% endblock content %}
+
+{% block variables %}
+    <script>
+        const data = {
+            templates: JSON.parse('{{ templates | tojson }}'),
+            manufacturers: JSON.parse('{{ manufacturers | tojson }}'),
+            lots: JSON.parse('{{ lots | tojson }}'),
+        }
+    </script>
+{% endblock variables %}
+
+{% block vue %}
+    <script src="{{ url_for('static', filename='js/add-reagent-form.js') }}"></script>
+{% endblock vue %}

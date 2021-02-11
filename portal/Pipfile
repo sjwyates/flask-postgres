@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+flask-heroku = "*"
+sqlalchemy = "*"
+flask-sqlalchemy = "*"
+gunicorn = "*"
+autoenv = "*"
+python-dotenv = "*"
+flask-migrate = "*"
+flask-script = "*"
+psycopg2 = "*"
+requests = "*"
+libsass = "*"
+enum34 = "*"
+flask-login = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"

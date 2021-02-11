@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ title }} | QC Reagent Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link href="{{ url_for('static', filename='css/main.scss.css') }}" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<section class="hero is-success">
+    <div class="hero-head">
+        <nav class="navbar">
+            <div class="container">
+                <div id="navbarMenuHeroA" class="navbar-menu">
+                    <div class="navbar-start">
+                        <figure class="image is-32x32">
+                            <img src="{{ url_for('static', filename='images/agc-logo.png') }}" alt="AGC Biologics Logo">
+                        </figure>
+                    </div>
+                    <div class="navbar-end">
+                        <a href="{{ url_for('main.index') }}" class="navbar-item">
+                            Dashboard
+                        </a>
+                        <a href="{{ url_for('main.add') }}" class="navbar-item">
+                            Receive
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            {% block content %}{% endblock content %}
+        </div>
+    </div>
+</section>
+
+<script src="{{ url_for('static', filename='js/vue.js') }}"></script>
+
+{% block variables %}{% endblock variables %}
+{% block vue %}{% endblock vue %}
+
+</body>
+
+</html>
