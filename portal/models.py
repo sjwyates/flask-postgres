@@ -16,7 +16,7 @@ class BaseMixin(object):
     updated = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
 
-class User(UserMixin, BaseMixin, db.Model):
+class User(UserMixin, db.Model):
 
     username = db.Column(db.String(30), unique=True)
     password = db.Column(db.String(12))

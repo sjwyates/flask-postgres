@@ -4,10 +4,23 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+flask = "*"
+flask-heroku = "*"
+flask-login = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
+flask-script = "*"
+sqlalchemy = "*"
+psycopg2-binary = "*"
+gunicorn = "*"
+autoenv = "*"
+python-dotenv = "*"
+requests = "*"
+enum34 = "*"
 werkzeug = "*"
 
 [dev-packages]
-pandas = "*"
+libsass = "*"
 
 [requires]
 python_version = "3.8"
