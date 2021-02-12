@@ -21,6 +21,7 @@ werkzeug = "*"
 
 [dev-packages]
 libsass = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.8"

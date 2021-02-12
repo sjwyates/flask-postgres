@@ -16,18 +16,20 @@ class BaseMixin(object):
     updated = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
 
-class User(UserMixin, db.Model):
+class User(UserMixin, BaseMixin, db.Model):
 
     username = db.Column(db.String(30), unique=True)
     password = db.Column(db.String(12))
     given_name = db.Column(db.String(20))
     surname = db.Column(db.String(20))
+    auth_level = db.Column(Enum('Admin', 'Super', 'Normal', name='auth_level'))
+    active = db.Column(db.Boolean, default=True)
 
 
 class Reagent(BaseMixin, db.Model):
 
-    template_id = db.Column(db.Integer, db.ForeignKey('reagent_templates.id'))
-    lot_id = db.Column(db.Integer, db.ForeignKey('lots.id'))
+    template_id = db.Column(db.Integer, db.ForeignKey('reagenttemplate.id'))
+    lot_id = db.Column(db.Integer, db.ForeignKey('lot.id'))
     status = db.Column(Enum('Unopened', 'Open', 'Quarantine', 'Discarded', name='status'))
 
     def __init__(self, template_id, lot_id, expiry, status):
@@ -77,8 +79,8 @@ class ReagentTemplate(BaseMixin, db.Model):
 
 class Lot(BaseMixin, db.Model):
 
-    template_id = db.Column(db.Integer, db.ForeignKey('reagent_templates.id'))
-    mfg_id = db.Column(db.Integer, db.ForeignKey('manufacturers.id'))
+    template_id = db.Column(db.Integer, db.ForeignKey('reagenttemplate.id'))
+    mfg_id = db.Column(db.Integer, db.ForeignKey('manufacturer.id'))
     lot_num = db.Column(db.String(30), default=False)
     expiry = db.Column(db.DateTime, default='NA')
     cofa = db.Column(db.String(50))
