@@ -6,6 +6,9 @@ body {
   margin: 1rem auto;
   max-width: 40rem; }
 
+.qc-select__multi {
+  width: 100%; }
+
 /*! bulma.io v0.9.1 | MIT License | github.com/jgthms/bulma */
 /* Bulma Utilities */
 @keyframes spinAround {

@@ -1,8 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div id="v-dash">
-    <h1 class="title">{{ title }}</h1>
-    <h2 class="subtitle">Welcome, {{ given_name }}!</h2>
-</div>
+    <div id="v-dash">
+        <div>
+            <h1 class="title">Hello {{ given_name }}!</h1>
+        </div>
+        <div id="plot">
+
+        </div>
+    </div>
 {% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/plotly.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock scripts %}

@@ -14,18 +14,18 @@ const AddReagentForm = Vue.component('add-reagent-form', {
     },
     computed: {
         tempLots: function () {
-            return this.template.length ?
-                this.lots.filter(lot => lot.template_id == this.template[0]) :
+            return this.template ?
+                this.lots.filter(lot => lot.template_id === this.template) :
                 [];
         },
         mfgWhere: function () {
             return this.tempLots.length ?
-                this.manufacturers.filter(mfg => this.tempLots.find(lot => lot.mfg_id == mfg.id)) :
+                this.manufacturers.filter(mfg => this.tempLots.find(lot => lot.mfg_id === mfg.id)) :
                 [];
         },
         lotWhere: function () {
             return this.mfgWhere.length ?
-                this.tempLots.filter(lot => lot.mfg_id == this.manufacturer) :
+                this.tempLots.filter(lot => lot.mfg_id === this.manufacturer) :
                 [];
         },
         selectSize: function () {
@@ -34,26 +34,31 @@ const AddReagentForm = Vue.component('add-reagent-form', {
                 this.templates.length;
         },
         tempData: function () {
-            return this.template.length ?
-                this.templates.find(template => template.id == this.template[0]) :
+            return this.template ?
+                this.templates.find(template => template.id === this.template) :
                 {container_size: '', container_type: ''};
         }
     },
     methods: {
-        submit: async function () {
+        submit: function () {
             const data = {
                 lot_id: this.lot,
                 quantity: +this.quantity
             }
-            const res = await fetch('http://127.0.0.1:5000/reagents/add', {
+            fetch('http://127.0.0.1:5000/reagents/add', {
                 method: 'POST',
+                redirect: 'follow',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                redirect: 'follow',
                 body: JSON.stringify(data)
-            });
-            console.log(res);
+            })
+                .then(res => {
+                    if (res.redirected) {
+                        window.location.href = res.url;
+                    }
+                })
+                .catch(err => console.error(err));
         },
         clear: function () {
             this.template = [];
@@ -69,11 +74,9 @@ const AddReagentForm = Vue.component('add-reagent-form', {
             <div class="field py-2">
                 <label for="templateSelect" class="label has-text-primary-dark">Template</label>
                 <div class="control">
-                    <div class="select is-multiple is-fullwidth"">
-                        <select id="templateSelect" multiple :size="selectSize" class="qc-select__multi" v-model="template" required>
-                            <option v-for="temp in templates" :key="'t-' + temp.id" :value="temp.id">{{ temp.description }}</option>
-                        </select>
-                    </div>
+                    <select id="templateSelect" size="8" class="textarea is-fullwidth" v-model="template" required>
+                        <option v-for="temp in templates" :key="'t-' + temp.id" :value="temp.id">{{ temp.description }}</option>
+                    </select>
                 </div>
             </div>
             <div class="columns py-2">
