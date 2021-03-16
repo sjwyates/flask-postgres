@@ -1,8 +1,43 @@
 .qc-form {
   margin: 1rem auto;
-  max-width: 40rem;
+
+  &__fieldset {
+    margin: 0rem auto;
+    width: 90%;
+  }
+
+  &__field {
+    margin: 0rem auto;
+    width: 100%;
+  }
 }
 
 .qc-select__multi {
   width: 100%;
+}
+
+.qc-span {
+  margin: 0rem auto;
+  &__parent {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0.8rem;
+  }
+
+  &__child {
+    flex: 1;
+    width: 100%;
+
+    &--text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &--spacer {
+      width: 1rem;
+      min-width: 0;
+    }
+  }
 }

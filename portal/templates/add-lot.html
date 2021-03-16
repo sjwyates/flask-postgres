@@ -4,7 +4,7 @@
     <div id="v-add" class="container has-background-light">
         <section class="section mx-6">
             <div class="container is-max-desktop">
-                <add-reagent-form :templates="templates" :manufacturers="manufacturers" :lots="lots"></add-reagent-form>
+                <add-lot-form :templates="templates" :manufacturers="manufacturers" :lots="lots"></add-lot-form>
             </div>
         </section>
     </div>
@@ -17,10 +17,9 @@
             manufacturers: JSON.parse({{ manufacturers | tojson }}),
             lots: JSON.parse({{ lots | tojson }}),
         }
-        const addLotURL = '{{ url_for('main.add_lot') }}'
     </script>
 {% endblock variables %}
 
 {% block scripts %}
-    <script type="text/javascript" src="{{ url_for('static', filename='js/add-reagent-form.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/add-lot-form.js') }}"></script>
 {% endblock scripts %}

@@ -20,6 +20,10 @@ def create_app():
         'portal': ('static/scss', 'static/css', '/static/css')
     })
 
+    with app.app_context():
+        from .plotlydash.dashboard import init_dashboard
+        app = init_dashboard(app)
+
     db.init_app(app)
 
     login_manager = LoginManager()

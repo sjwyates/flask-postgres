@@ -55,6 +55,39 @@ def add_reagent():
         return redirect(url_for('main.details', reagent_id=reagent['lot_id']))
 
 
+@main.route('/reagents/lots/add', methods=['GET', 'POST'])
+@login_required
+def add_lot():
+    if request.method == 'GET':
+        templates = json.dumps([{
+            'id': getattr(d, 'id'),
+            'description': getattr(d, 'description'),
+            'container_size': getattr(d, 'container_size'),
+            'container_units': getattr(d, 'container_units'),
+            'requires_qual': getattr(d, 'requires_qual')
+        } for d in db.session.query(ReagentTemplate).all()], cls=EnumEncoder)
+        mfgs = json.dumps([{
+            'id': getattr(d, 'id'),
+            'name': getattr(d, 'name')
+        } for d in db.session.query(Manufacturer).all()], cls=EnumEncoder)
+        lots = json.dumps([{
+            'id': getattr(d, 'id'),
+            'lot_num': getattr(d, 'lot_num'),
+            'template_id': getattr(d, 'template_id'),
+            'mfg_id': getattr(d, 'mfg_id'),
+            'expiry': datetime.strftime(getattr(d, 'expiry'), '%Y-%m-%d')
+        } for d in db.session.query(Lot).all()], cls=EnumEncoder)
+        return render_template('add-lot.html',
+                               templates=templates,
+                               manufacturers=mfgs,
+                               lots=lots,
+                               title='Add Reagent Lot')
+    if request.method == 'POST':
+        reagent = request.get_json()
+        print(reagent)
+        return redirect(url_for('main.add_regent'))
+
+
 @main.route('/reagents/<reagent_id>', methods=['GET'])
 @login_required
 def details(reagent_id):

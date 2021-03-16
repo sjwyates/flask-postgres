@@ -10,56 +10,66 @@
 
 <body>
 
-<section class="hero is-success">
-    <div class="hero-head">
-        <nav class="navbar">
-            <div class="container">
-                <div id="navbarMenuHeroA" class="navbar-menu">
-                    <div class="navbar-start">
-                        {% if current_user.is_authenticated %}
-                            <a href="{{ url_for('main.dashboard') }}" class="navbar-item">
-                        {% else %}
-                            <a href="{{ url_for('main.index') }}" class="navbar-item">
-                        {% endif %}
-                        <figure class="image is-32x32">
-                            <img src="{{ url_for('static', filename='images/agc-logo.png') }}"
-                                 alt="AGC Biologics Logo">
-                        </figure>
-                        </a>
-                    </div>
-                    <div class="navbar-end">
-                        {% if current_user.is_authenticated %}
-                            <a href="{{ url_for('main.dashboard') }}" class="navbar-item">
-                                Dashboard
-                            </a>
-                        {% endif %}
-                        <a href="{{ url_for('main.add_reagent') }}" class="navbar-item">
-                            Receive
-                        </a>
-                        {% if not current_user.is_authenticated %}
-                            <a href="{{ url_for('auth.login') }}" class="navbar-item">
-                                Login
-                            </a>
-                        {% endif %}
-                        {% if current_user.is_authenticated %}
-                            <a href="{{ url_for('auth.logout') }}" class="navbar-item">
-                                Log Out
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </div>
-    <div class="hero-body">
-        <div class="container has-text-centered">
-            <h1 class="title">{{ title }}</h1>
-            {% block content %}{% endblock content %}
+<nav class="navbar is-success">
+    <div class="columns is-mobile is-vcentered">
+        <div class="column is-narrow navbar-brand">
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('main.dashboard') }}" class="navbar-item">
+            {% else %}
+                <a href="{{ url_for('main.index') }}" class="navbar-item">
+            {% endif %}
+                <figure class="image is-32x32">
+                    <img src="{{ url_for('static', filename='images/agc-logo.png') }}"
+                         alt="AGC Biologics Logo">
+                </figure>
+            </a>
         </div>
+        <div class="column is-hidden-mobile"></div>
+        <div class="column is-narrow is-flex has-background-success">
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('main.dashboard') }}" class="navbar-item has-text-light">
+                    Dashboard
+                </a>
+            {% endif %}
+            <a href="{{ url_for('main.add_reagent') }}" class="navbar-item has-text-light">
+                Receive
+            </a>
+            {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('auth.login') }}" class="navbar-item has-text-light">
+                    Login
+                </a>
+            {% endif %}
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('auth.logout') }}" class="navbar-item has-text-light">
+                    Log Out
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+</div>
+<section class="hero is-success">
+    <div class="hero-body">
+        <h1 class="title">{{ title }}</h1>
+    </div>
+</section>
+<section>
+    <div class="container has-text-centered">
+        {% block content %}{% endblock content %}
     </div>
 </section>
 
-<script src="{{ url_for('static', filename='js/vue.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/vue.js') }}"></script>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', () => {
+        const burger = document.getElementById('navBurger');
+        burger.addEventListener('click', () => {
+            const target = document.getElementById(burger.dataset.target);
+            burger.classList.toggle('is-active');
+            target.classList.toggle('is-active');
+        })
+    })
+</script>
 
 {% block variables %}{% endblock variables %}
 {% block scripts %}{% endblock scripts %}

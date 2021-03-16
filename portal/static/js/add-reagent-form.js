@@ -6,10 +6,11 @@ const AddReagentForm = Vue.component('add-reagent-form', {
     },
     data: function () {
         return {
-            template: [],
+            template: null,
             manufacturer: null,
             lot: null,
-            quantity: null
+            quantity: null,
+            addLotURL: addLotURL,
         }
     },
     computed: {
@@ -27,11 +28,6 @@ const AddReagentForm = Vue.component('add-reagent-form', {
             return this.mfgWhere.length ?
                 this.tempLots.filter(lot => lot.mfg_id === this.manufacturer) :
                 [];
-        },
-        selectSize: function () {
-            return this.templates.length > 8 ?
-                8 :
-                this.templates.length;
         },
         tempData: function () {
             return this.template ?
@@ -70,7 +66,7 @@ const AddReagentForm = Vue.component('add-reagent-form', {
     template: `
     <form id="add-reagent-form" class="qc-form has-background-white p-6" @submit.prevent="submit" @reset.prevent="clear">
         <fieldset>
-            <legend class="title has-text-primary-dark">Enter Details</legend>
+            <legend class="subtitle has-text-primary-dark">Reagent Details</legend>
             <div class="field py-2">
                 <label for="templateSelect" class="label has-text-primary-dark">Template</label>
                 <div class="control">
@@ -81,10 +77,10 @@ const AddReagentForm = Vue.component('add-reagent-form', {
             </div>
             <div class="columns py-2">
                 <div class="field column">
-                    <label for="mfgSelect" class="label has-text-primary-dark" :class="{'has-text-gray': template.length == 0}">Manufacturer</label>
+                    <label for="mfgSelect" class="label has-text-primary-dark">Manufacturer</label>
                     <div class="control">
                         <div class="select is-fullwidth">
-                            <select id="mfgSelect" v-model="manufacturer" :disabled="template.length == 0" required>
+                            <select id="mfgSelect" v-model="manufacturer" :disabled="!template" required>
                                 <option disabled selected value="">Select Manufacturer</option>
                                 <option v-for="mfg in mfgWhere" :key="'m-' + mfg.id" :value="mfg.id">{{ mfg.name }}</option>
                             </select>
@@ -92,10 +88,10 @@ const AddReagentForm = Vue.component('add-reagent-form', {
                     </div>
                 </div>
                 <div class="field column">
-                    <label for="lotSelect" class="label has-text-primary-dark" :class="{'has-text-gray': manufacturer == null}">Lot</label>
+                    <label for="lotSelect" class="label has-text-primary-dark">Lot</label>
                     <div class="control">
                         <div class="select is-fullwidth">
-                            <select id="lotSelect" v-model="lot" :disabled="manufacturer == null" required>
+                            <select id="lotSelect" v-model="lot" :disabled="!manufacturer" required>
                                 <option disabled selected value="">Select Lot</option>
                                 <option v-for="lot in lotWhere" :key="'l-' + lot.id" :value="lot.id">{{ lot.lot_num }}</option>
                             </select>
@@ -105,10 +101,13 @@ const AddReagentForm = Vue.component('add-reagent-form', {
             </div>
             <div class="columns">
                 <div class="field column is-narrow">
-                    <label for="quantityInput" class="label has-text-primary-dark" :class="{'has-text-gray': lot == null}">Quantity</label>
+                    <label for="quantityInput" class="label has-text-primary-dark">Quantity</label>
                     <div class="control">
-                        <input id="quantityInput" v-model="quantity" class="input" :disabled="lot == null" type="number" min="1" required>
+                        <input id="quantityInput" v-model="quantity" class="input" :disabled="!lot" type="number" min="1" required>
                     </div>
+                </div>
+                <div>
+                    <a class="button is-success is-light" :href="addLotURL">Add New Lot</a>
                 </div>
             </div>
             <div class="field is-grouped columns is-centered py-4">

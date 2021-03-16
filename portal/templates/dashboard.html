@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div id="v-dash">
+    <div id="v-dash" class="container">
         <div>
             <h1 class="title">Hello {{ given_name }}!</h1>
         </div>
-        <div id="plot">
-
+        <div class="columns">
+            <div class="column">
+                <div id="plot1"></div>
+            </div>
+            <div class="column">
+                <div id="plot2"></div>
+            </div>
         </div>
     </div>
 {% endblock %}
