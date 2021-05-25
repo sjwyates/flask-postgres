@@ -14,7 +14,7 @@
     <div class="columns is-mobile is-vcentered">
         <div class="column is-narrow navbar-brand">
             {% if current_user.is_authenticated %}
-                <a href="{{ url_for('main.dashboard') }}" class="navbar-item">
+                <a href="{{ url_for('/dashboard/') }}" class="navbar-item">
             {% else %}
                 <a href="{{ url_for('main.index') }}" class="navbar-item">
             {% endif %}
@@ -27,7 +27,7 @@
         <div class="column is-hidden-mobile"></div>
         <div class="column is-narrow is-flex has-background-success">
             {% if current_user.is_authenticated %}
-                <a href="{{ url_for('main.dashboard') }}" class="navbar-item has-text-light">
+                <a href="{{ url_for('/dashboard/') }}" class="navbar-item has-text-light">
                     Dashboard
                 </a>
             {% endif %}

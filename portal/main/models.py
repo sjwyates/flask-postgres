@@ -2,8 +2,8 @@ from sqlalchemy.types import Enum
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.sql import func
 from flask_login import UserMixin
-from .enums import ReagentStatus, ExpiryTypes, ContainerUnits
-from . import db
+from portal.main.enums import ReagentStatus, ExpiryTypes, ContainerUnits
+from portal import db
 
 
 class BaseMixin(object):

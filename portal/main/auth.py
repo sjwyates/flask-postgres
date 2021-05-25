@@ -1,9 +1,9 @@
 # https://www.digitalocean.com/community/tutorials/how-to-add-authentication-to-your-app-with-flask-login
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
-from . import db
-from .models import PortalUser
+from portal import db
+from portal.main.models import PortalUser
 
 auth = Blueprint('auth', __name__)
 
@@ -11,7 +11,10 @@ auth = Blueprint('auth', __name__)
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return render_template('login.html', title='Portal Login')
+        if current_user.is_authenticated:
+            return redirect(url_for('/dashboard/'))
+        else:
+            return render_template('login.html', title='Portal Login')
     elif request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
@@ -23,7 +26,7 @@ def login():
             return redirect(url_for('auth.login'))
         else:
             login_user(user, remember=False)
-            return redirect(url_for('main.dashboard'))
+            return redirect(url_for('/dashboard/'))
 
 
 @auth.route('/signup', methods=['GET', 'POST'])

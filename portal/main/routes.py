@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required, current_user
-from . import db
+from portal import db
 import json
-from .models import ReagentTemplate, Lot, Manufacturer
-from .enums import EnumEncoder
+from portal.main.models import ReagentTemplate, Lot, Manufacturer
+from portal.main.enums import EnumEncoder
 from datetime import datetime
 
 main = Blueprint('main', __name__)
@@ -11,16 +11,19 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    return render_template('index.html', title='Home')
+    if current_user.is_authenticated:
+        return redirect(url_for('/dashboard/'))
+    else:
+        return render_template('index.html', title='Home')
 
 
-@main.route('/dashboard')
-@login_required
-def dashboard():
-    return render_template('dashboard.html',
-                           title='Dashboard',
-                           given_name=current_user.given_name,
-                           surname=current_user.surname)
+# @main.route('/dashboard')
+# @login_required
+# def dashboard():
+#     return render_template('dashboard.html',
+#                            title='Dashboard',
+#                            given_name=current_user.given_name,
+#                            surname=current_user.surname)
 
 
 @main.route('/reagents/add', methods=['GET', 'POST'])

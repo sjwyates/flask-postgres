@@ -15,14 +15,10 @@ def create_app():
     app.config.from_object(os.environ['APP_SETTINGS'])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    # @todo: disable in production
-    app.wsgi_app = SassMiddleware(app.wsgi_app, {
-        'portal': ('static/scss', 'static/css', '/static/css')
-    })
-
-    with app.app_context():
-        from .plotlydash.dashboard import init_dashboard
-        app = init_dashboard(app)
+    if app.config['DEVELOPMENT']:
+        app.wsgi_app = SassMiddleware(app.wsgi_app, {
+            'portal': ('static/scss', 'static/css', '/static/css')
+        })
 
     db.init_app(app)
 
@@ -30,21 +26,27 @@ def create_app():
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
-    from .models import PortalUser
+    from portal.main.models import PortalUser
 
     @login_manager.user_loader
     def load_user(user_id):
         return PortalUser.query.get(int(user_id))
 
-    from .auth import auth as auth_blueprint
+    from portal.main.auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
 
-    from .main import main as main_blueprint
+    from portal.main.routes import main as main_blueprint
     app.register_blueprint(main_blueprint)
+
+    from portal.plotlydash.portal_dash import dashboard as dash_blueprint
+    app = dash_blueprint(app)
 
     migrate = Migrate(app, db)
     manager = Manager(app)
 
     manager.add_command('db', MigrateCommand)
+
+    if __name__ == '__main__':
+        manager.run()
 
     return app
